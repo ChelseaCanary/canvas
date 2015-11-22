@@ -1,0 +1,294 @@
+<!doctype html>
+<html>
+<head>
+<title>Responsive Interactive Canvas</title>
+ <style>
+canvas {
+ border: 1px solid black;;
+}
+</style>
+<script>
+	var canvas;
+	var context;
+	var circles = [];
+	var rectangles= [];
+	var moons = [];
+	var triangles = [];
+	var blobs = [];
+	
+	function Circle(x, y, color){
+		this.x = x;
+		this.y = y;
+		this.color = color;
+		this.dx = Math.random()*5-2;
+		this.dy = Math.random()*7-4;
+	}
+	
+	function init(){
+		canvas = document.getElementById('canvas');
+		context = canvas.getContext('2d');
+		
+		window.addEventListener('resize', resizeCanvas, false);
+		window.addEventListener('orientationchange', resizeCanvas, false);
+		resizeCanvas();
+		text();
+		canvas.onclick = function(event){
+			handleClick(event.clientX, event.clientY);
+		};
+		setInterval(handleClick, 30);
+	}
+	
+	function handleClick(x, y){
+		fillBackgroundColor();
+		var numbers = Math.floor(Math.random()*100);
+		var colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple'];
+		var color = colors[Math.floor(Math.random()*colors.length)];
+			if (numbers >= 0 && numbers <= 19){
+			circles.push(new Circle(x, y, color));
+			}
+			else if (numbers >= 20 && numbers <=39){
+			rectangles.push(new Rectangle (x,y,color));
+			}
+			else if (numbers >=40 && numbers <=59){
+			moons.push(new Moon (x,y,color));
+			}
+			else if (numbers >=60 && numbers <=79){
+			triangles.push(new Triangle (x,y,color));
+			}
+			else if (numbers >= 80 && numbers <= 99){
+			blobs.push(new Blob (x,y,color));
+			}
+		for(var i = 0; i < moons.length; i++){
+			drawMoon(moons[i]); 
+		}	
+		for(var i = 0; i < circles.length; i++){
+			drawCircle(circles[i]); 
+		}
+		for(var i = 0; i < rectangles.length; i++){
+			drawRectangle(rectangles[i]); 
+		}
+		for(var i = 0; i < triangles.length; i++){
+			drawTriangle(triangles[i]); 
+		}
+		for(var i = 0; i < blobs.length; i++){
+			drawBlob(blobs[i]); 
+		}
+	}
+	
+	function drawCircle(circle){
+		context.beginPath();
+		context.arc(circle.x, circle.y, 30, 0, degreesToRadians(360)), true;
+		context.fillStyle = circle.color;
+		context.fill();
+		if (circle.x + circle.dx > canvas.width || circle.x + circle.dx < 0)
+    	circle.dx = -circle.dx;
+  		if (circle.y + circle.dy > canvas.height || circle.y + circle.dy < 0)
+    	circle.dy = -circle.dy;
+  		circle.x += circle.dx;
+  		circle.y += circle.dy;
+	}
+	
+	function Rectangle (x,y,color){
+		this.x = x;
+		this.y = y;
+		this.x1 = x+5;
+		this.y1 = y+3;
+		this.color=color;
+		this.dx = Math.random()*5-3;
+		this.dy = Math.random()*7-5;
+		this.dx1 = Math.random()*5-3;
+		this.dy1 = Math.random()*7-5;
+	}
+	
+	function drawRectangle (rectangle) {
+		context.fillStyle= rectangle.color;
+		context.fillRect(rectangle.x, rectangle.y, rectangle.x1, rectangle.y1);
+		context.fill();
+		if (rectangle.x + rectangle.dx > canvas.width || rectangle.x + rectangle.dx < 0)
+    	rectangle.dx = -rectangle.dx;
+  		if (rectangle.y + rectangle.dy > canvas.height || rectangle.y + rectangle.dy < 0)
+    	rectangle.dy = -rectangle.dy;
+  		rectangle.x += rectangle.dx;
+  		rectangle.y += rectangle.dy;
+
+	}
+	
+	function Moon (x,y,color){
+		this.x = x;
+		this.y = y;
+		this.color = color;
+		this.dx = Math.random()*5-2;
+		this.dy = Math.random()*7-4;
+		this.x1 = x+10;
+		this.y1 = y-10;
+	}
+	
+ 	function drawMoon (moon){
+ 
+ 		context.beginPath();
+		context.arc(moon.x, moon.y, 50, 0, degreesToRadians(360)), true;
+		context.closePath();
+		context.fillStyle = moon.color;
+		context.fill();
+		context.beginPath();
+		context.arc(moon.x1, moon.y1, 50, 0, degreesToRadians(360)), true;
+		context.closePath();
+		context.fillStyle = 'white';
+		context.fill();
+		if (moon.x + moon.dx > canvas.width || moon.x + moon.dx < 0)
+    	moon.dx = -moon.dx;
+  		if (moon.y + moon.dy > canvas.height || moon.y + moon.dy < 0)
+    	moon.dy = -moon.dy;
+  		moon.x += moon.dx;
+  		moon.y += moon.dy;
+  		moon.x1 += moon.dx;
+  		moon.y1 += moon.dy;
+ 	} 
+ 	
+ 	function Triangle (x,y,color){
+ 		this.x = x;
+		this.y = y;
+		this.color = color;
+		this.dx = Math.random()*5-2;
+		this.dy = Math.random()*7-4;
+		this.x1 = x+10;
+		this.y1 = y-10;
+		this.x2 = x-10;
+		this.y2 = y-10;
+ 	}
+ 	
+ 	function drawTriangle (triangle){
+ 		context.beginPath();
+ 		context.moveTo(triangle.x,triangle.y);
+ 		context.lineTo(triangle.x1,triangle.y1);
+ 		context.lineTo(triangle.x2,triangle.y2);
+ 		context.lineTo(triangle.x,triangle.y);
+		context.closePath();
+		context.fillStyle = triangle.color;
+		context.fill();
+		if (triangle.x + triangle.dx > canvas.width || triangle.x + triangle.dx < 0)
+    	triangle.dx = -triangle.dx;
+  		if (triangle.y + triangle.dy > canvas.height || triangle.y + triangle.dy < 0)
+    	triangle.dy = -triangle.dy;
+		triangle.x += triangle.dx
+		triangle.y += triangle.dy
+		triangle.x1 += triangle.dx
+		triangle.y1 += triangle.dy
+		triangle.x2 += triangle.dx
+		triangle.y2 += triangle.dy
+ 	}
+	
+	function Blob (x,y,color){
+ 		this.x = x;
+		this.y = y;
+		this.color = color;
+		this.dx = Math.random()*5-2;
+		this.dy = Math.random()*7-4;
+		this.dx1 = Math.random()*5-2;
+		this.dy1 = Math.random()*7-4;
+		this.dx2 = Math.random()*5-2;
+		this.dy2 = Math.random()*7-4;
+		this.dx3 = Math.random()*5-2;
+		this.dy3 = Math.random()*7-4;
+		this.dx4 = Math.random()*5-2;
+		this.dy4 = Math.random()*7-4;
+		this.x1 = x+10;
+		this.y1 = y-10;
+		this.x2 = x+50;
+		this.y2 = y-50;
+		this.x3 = x-10;
+		this.y3 = y+50;
+		this.x4 = x-50;
+		this.y4 = y+10;
+ 	}
+ 	
+ 	function drawBlob (blob){
+ 		context.beginPath();
+ 		context.moveTo(blob.x,blob.y);
+ 		context.lineTo(blob.x1,blob.y1);
+ 		context.lineTo(blob.x2,blob.y2);
+ 		context.lineTo(blob.x3,blob.y3);
+ 		context.lineTo(blob.x4,blob.y4);
+ 		context.lineTo(blob.x,blob.y);
+		context.closePath();
+		context.fillStyle = blob.color;
+		context.fill();
+		if (blob.x + blob.dx > canvas.width || blob.x + blob.dx < 0)
+    	blob.dx = -blob.dx;
+  		if (blob.y + blob.dy > canvas.height || blob.y + blob.dy < 0)
+    	blob.dy = -blob.dy;
+    	if (blob.x1 + blob.dx1 > canvas.width || blob.x1 + blob.dx1 < 0)
+    	blob.dx1 = -blob.dx1;
+  		if (blob.y1 + blob.dy1 > canvas.height || blob.y1 + blob.dy1 < 0)
+    	blob.dy1 = -blob.dy1;
+    	if (blob.x2 + blob.dx2 > canvas.width || blob.x2 + blob.dx2 < 0)
+    	blob.dx2 = -blob.dx2;
+  		if (blob.y2 + blob.dy2 > canvas.height || blob.y2 + blob.dy2 < 0)
+    	blob.dy2 = -blob.dy2;
+    	if (blob.x3 + blob.dx3 > canvas.width || blob.x3 + blob.dx3 < 0)
+    	blob.dx3 = -blob.dx3;
+  		if (blob.y3 + blob.dy3 > canvas.height || blob.y3 + blob.dy3 < 0)
+    	blob.dy3 = -blob.dy3;
+    	if (blob.x4 + blob.dx4 > canvas.width || blob.x4 + blob.dx4 < 0)
+    	blob.dx4 = -blob.dx4;
+  		if (blob.y4 + blob.dy4 > canvas.height || blob.y4 + blob.dy4 < 0)
+    	blob.dy4 = -blob.dy4;
+		blob.x += blob.dx;
+		blob.y += blob.dy;
+		blob.x1 += blob.dx;
+		blob.y1 += blob.dy;
+		blob.x2 += blob.dx;
+		blob.y2 += blob.dy;
+		blob.x3 += blob.dx;
+		blob.y3 += blob.dy;
+		blob.x4 += blob.dx;
+		blob.y4 += blob.dy;
+ 	}
+	
+	function resizeCanvas(){
+		canvas.width = window.innerWidth-22;
+		canvas.height = window.innerHeight-22; 
+		fillBackgroundColor();
+		for(var i = 0; i < moons.length; i++){
+			drawMoon(moons[i]); 
+		}
+		for(var i = 0; i < circles.length; i++){
+			drawCircle(circles[i]);
+		}
+		for(var i = 0; i < rectangles.length; i++){
+			drawRectangle(rectangles[i]); 
+		}
+		for(var i = 0; i < triangles.length; i++){
+			drawTriangle(triangles[i]); 
+		}
+		for(var i = 0; i < blobs.length; i++){
+			drawBlob(blobs[i]); 
+		}
+	}
+	
+	function fillBackgroundColor(){
+		context.fillStyle = 'white';
+		context.fillRect (0, 0, canvas.width,canvas.height);
+		
+		text();
+	}
+	
+	function degreesToRadians(degrees){
+		return (degrees * Math.PI)/180;
+	} 
+
+	function text(){
+		context.font = '15px Arial';
+		context.fillStyle = 'black';
+		context.textAlign = 'center';
+		context.fillText('Click the screen to make the things', canvas.width/2, (2/canvas.height) +50);
+	}
+	
+window.onload = init;
+	
+</script>
+</head>
+<body>
+<canvas id ='canvas' width=500 height=500></canvas>
+</body>
+</html>
