@@ -41,7 +41,7 @@ canvas {
 	function handleClick(x, y){
 		fillBackgroundColor();
 		var numbers = Math.floor(Math.random()*100);
-		var colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple'];
+		var colors = ['rgb(0, 255, 153)', 'rgb(204, 0, 0)', 'rgb(0, 255, 255)', 'rgb(255, 255, 102)', 'rgb(255, 153, 102)', 'rgb(153, 102, 255)'];
 		var color = colors[Math.floor(Math.random()*colors.length)];
 			if (numbers >= 0 && numbers <= 19){
 			circles.push(new Circle(x, y, color));
@@ -91,8 +91,8 @@ canvas {
 	function Rectangle (x,y,color){
 		this.x = x;
 		this.y = y;
-		this.x1 = x+5;
-		this.y1 = y+3;
+		this.x1 = x+3;
+		this.y1 = y+1;
 		this.color=color;
 		this.dx = Math.random()*5-3;
 		this.dy = Math.random()*7-5;
@@ -151,10 +151,10 @@ canvas {
 		this.color = color;
 		this.dx = Math.random()*5-2;
 		this.dy = Math.random()*7-4;
-		this.x1 = x+10;
-		this.y1 = y-10;
-		this.x2 = x-10;
-		this.y2 = y-10;
+		this.x1 = x+50;
+		this.y1 = y-50;
+		this.x2 = x-50;
+		this.y2 = y-50;
  	}
  	
  	function drawTriangle (triangle){
@@ -278,10 +278,10 @@ canvas {
 	} 
 
 	function text(){
-		context.font = '15px Arial';
+		context.font = '20px Arial';
 		context.fillStyle = 'black';
 		context.textAlign = 'center';
-		context.fillText('Click the screen to make the things', canvas.width/2, (2/canvas.height) +50);
+		context.fillText('Click the screen anywhere to make the things and watch magic happen!', canvas.width/2, (2/canvas.height) +50);
 	}
 	
 window.onload = init;
