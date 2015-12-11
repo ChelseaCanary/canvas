@@ -4,17 +4,32 @@
 <title>Responsive Interactive Canvas</title>
  <style>
 canvas {
- border: 1px solid black;;
+ border: 5px solid purple;;
 }
+
 </style>
 <script>
 	var canvas;
 	var context;
 	var circles = [];
-	var rectangles= [];
 	var moons = [];
 	var triangles = [];
 	var blobs = [];
+	
+	function text(){
+		context.font = '22px Silom';
+		context.fillStyle = 'white';
+		context.textAlign = 'center';
+		context.fillText('Welcome to my mini geometric universe!', canvas.width/2, (2/canvas.height) + 35);
+		context.font = '18px Silom';
+		context.fillStyle = 'white';
+		context.textAlign = 'center';
+		context.fillText('Click anywhere to make the interstellar objects appear and fly!', canvas.width/2, (2/canvas.height) + 65);
+		context.font = '12px Silom';
+		context.fillStyle = 'white';
+		context.textAlign = 'center';
+		context.fillText('Look at em go!', canvas.width/2, (2/canvas.height) + 700);
+	}
 	
 	function Circle(x, y, color){
 		this.x = x;
@@ -38,24 +53,22 @@ canvas {
 		setInterval(handleClick, 30);
 	}
 	
+	
 	function handleClick(x, y){
 		fillBackgroundColor();
-		var numbers = Math.floor(Math.random()*100);
-		var colors = ['rgb(0, 255, 153)', 'rgb(204, 0, 0)', 'rgb(0, 255, 255)', 'rgb(255, 255, 102)', 'rgb(255, 153, 102)', 'rgb(153, 102, 255)'];
+		var numbers = Math.floor(Math.random()*80);
+		var colors = ['rgb(204, 204, 255)', 'rgb(204, 255, 255)', 'rgb(255, 153, 153)', 'rgb(255, 255, 204)', 'rgb(204, 255, 204)','rgb(255, 153, 255)'];
 		var color = colors[Math.floor(Math.random()*colors.length)];
 			if (numbers >= 0 && numbers <= 19){
 			circles.push(new Circle(x, y, color));
 			}
-			else if (numbers >= 20 && numbers <=39){
-			rectangles.push(new Rectangle (x,y,color));
-			}
-			else if (numbers >=40 && numbers <=59){
+			else if (numbers >=20 && numbers <=39){
 			moons.push(new Moon (x,y,color));
 			}
-			else if (numbers >=60 && numbers <=79){
+			else if (numbers >=40 && numbers <=59){
 			triangles.push(new Triangle (x,y,color));
 			}
-			else if (numbers >= 80 && numbers <= 99){
+			else if (numbers >= 60 && numbers <= 79){
 			blobs.push(new Blob (x,y,color));
 			}
 		for(var i = 0; i < moons.length; i++){
@@ -63,9 +76,6 @@ canvas {
 		}	
 		for(var i = 0; i < circles.length; i++){
 			drawCircle(circles[i]); 
-		}
-		for(var i = 0; i < rectangles.length; i++){
-			drawRectangle(rectangles[i]); 
 		}
 		for(var i = 0; i < triangles.length; i++){
 			drawTriangle(triangles[i]); 
@@ -77,7 +87,7 @@ canvas {
 	
 	function drawCircle(circle){
 		context.beginPath();
-		context.arc(circle.x, circle.y, 30, 0, degreesToRadians(360)), true;
+		context.arc(circle.x, circle.y, 10, 0, degreesToRadians(360)), true;
 		context.fillStyle = circle.color;
 		context.fill();
 		if (circle.x + circle.dx > canvas.width || circle.x + circle.dx < 0)
@@ -88,52 +98,28 @@ canvas {
   		circle.y += circle.dy;
 	}
 	
-	function Rectangle (x,y,color){
-		this.x = x;
-		this.y = y;
-		this.x1 = x+3;
-		this.y1 = y+1;
-		this.color=color;
-		this.dx = Math.random()*5-3;
-		this.dy = Math.random()*7-5;
-		this.dx1 = Math.random()*5-3;
-		this.dy1 = Math.random()*7-5;
-	}
-	
-	function drawRectangle (rectangle) {
-		context.fillStyle= rectangle.color;
-		context.fillRect(rectangle.x, rectangle.y, rectangle.x1, rectangle.y1);
-		context.fill();
-		if (rectangle.x + rectangle.dx > canvas.width || rectangle.x + rectangle.dx < 0)
-    	rectangle.dx = -rectangle.dx;
-  		if (rectangle.y + rectangle.dy > canvas.height || rectangle.y + rectangle.dy < 0)
-    	rectangle.dy = -rectangle.dy;
-  		rectangle.x += rectangle.dx;
-  		rectangle.y += rectangle.dy;
 
-	}
-	
 	function Moon (x,y,color){
 		this.x = x;
 		this.y = y;
 		this.color = color;
-		this.dx = Math.random()*5-2;
-		this.dy = Math.random()*7-4;
+		this.dx = Math.random()*9-3;
+		this.dy = Math.random()*4-2;
 		this.x1 = x+10;
-		this.y1 = y-10;
+		this.y1 = y-5;
 	}
 	
  	function drawMoon (moon){
  
  		context.beginPath();
-		context.arc(moon.x, moon.y, 50, 0, degreesToRadians(360)), true;
+		context.arc(moon.x, moon.y, 40, 0, degreesToRadians(360)), true;
 		context.closePath();
 		context.fillStyle = moon.color;
 		context.fill();
 		context.beginPath();
-		context.arc(moon.x1, moon.y1, 50, 0, degreesToRadians(360)), true;
+		context.arc(moon.x1, moon.y1, 33, 0, degreesToRadians(360)), true;
 		context.closePath();
-		context.fillStyle = 'white';
+		context.fillStyle = 'black';
 		context.fill();
 		if (moon.x + moon.dx > canvas.width || moon.x + moon.dx < 0)
     	moon.dx = -moon.dx;
@@ -149,12 +135,12 @@ canvas {
  		this.x = x;
 		this.y = y;
 		this.color = color;
-		this.dx = Math.random()*5-2;
-		this.dy = Math.random()*7-4;
-		this.x1 = x+50;
-		this.y1 = y-50;
-		this.x2 = x-50;
-		this.y2 = y-50;
+		this.dx = Math.random()*15-2;
+		this.dy = Math.random()*17-4;
+		this.x1 = x+3;
+		this.y1 = y-40;
+		this.x2 = x-60;
+		this.y2 = y-30;
  	}
  	
  	function drawTriangle (triangle){
@@ -184,22 +170,26 @@ canvas {
 		this.color = color;
 		this.dx = Math.random()*5-2;
 		this.dy = Math.random()*7-4;
-		this.dx1 = Math.random()*5-2;
-		this.dy1 = Math.random()*7-4;
-		this.dx2 = Math.random()*5-2;
-		this.dy2 = Math.random()*7-4;
-		this.dx3 = Math.random()*5-2;
+		this.dx1 = Math.random()*8-1;
+		this.dy1 = Math.random()*9-4;
+		this.dx2 = Math.random()*6-2;
+		this.dy2 = Math.random()*7-5;
+		this.dx3 = Math.random()*5-3;
 		this.dy3 = Math.random()*7-4;
 		this.dx4 = Math.random()*5-2;
 		this.dy4 = Math.random()*7-4;
-		this.x1 = x+10;
-		this.y1 = y-10;
-		this.x2 = x+50;
-		this.y2 = y-50;
-		this.x3 = x-10;
-		this.y3 = y+50;
+		this.dx5 = Math.random()*5-2;
+		this.dy5 = Math.random()*7-4;
+		this.x1 = x+75;
+		this.y1 = y-80;
+		this.x2 = x+30;
+		this.y2 = y-3;
+		this.x3 = x-40;
+		this.y3 = y+20;
 		this.x4 = x-50;
-		this.y4 = y+10;
+		this.y4 = y+70;
+		this.x5 = x-60;
+		this.y5 = y+10;
  	}
  	
  	function drawBlob (blob){
@@ -209,6 +199,7 @@ canvas {
  		context.lineTo(blob.x2,blob.y2);
  		context.lineTo(blob.x3,blob.y3);
  		context.lineTo(blob.x4,blob.y4);
+ 		context.lineTo(blob.x5,blob.y5);
  		context.lineTo(blob.x,blob.y);
 		context.closePath();
 		context.fillStyle = blob.color;
@@ -233,6 +224,10 @@ canvas {
     	blob.dx4 = -blob.dx4;
   		if (blob.y4 + blob.dy4 > canvas.height || blob.y4 + blob.dy4 < 0)
     	blob.dy4 = -blob.dy4;
+    	if (blob.x5 + blob.dx5 > canvas.width || blob.x5 + blob.dx5 < 0)
+    	blob.dx4 = -blob.dx4;
+  		if (blob.y5 + blob.dy5 > canvas.height || blob.y5 + blob.dy5 < 0)
+    	blob.dy5 = -blob.dy5;
 		blob.x += blob.dx;
 		blob.y += blob.dy;
 		blob.x1 += blob.dx;
@@ -243,6 +238,8 @@ canvas {
 		blob.y3 += blob.dy;
 		blob.x4 += blob.dx;
 		blob.y4 += blob.dy;
+		blob.x5 += blob.dx;
+		blob.y5 += blob.dy;
  	}
 	
 	function resizeCanvas(){
@@ -255,9 +252,6 @@ canvas {
 		for(var i = 0; i < circles.length; i++){
 			drawCircle(circles[i]);
 		}
-		for(var i = 0; i < rectangles.length; i++){
-			drawRectangle(rectangles[i]); 
-		}
 		for(var i = 0; i < triangles.length; i++){
 			drawTriangle(triangles[i]); 
 		}
@@ -267,7 +261,7 @@ canvas {
 	}
 	
 	function fillBackgroundColor(){
-		context.fillStyle = 'white';
+		context.fillStyle = 'black';
 		context.fillRect (0, 0, canvas.width,canvas.height);
 		
 		text();
@@ -277,12 +271,7 @@ canvas {
 		return (degrees * Math.PI)/180;
 	} 
 
-	function text(){
-		context.font = '20px Arial';
-		context.fillStyle = 'black';
-		context.textAlign = 'center';
-		context.fillText('Click the screen anywhere to make the things and watch magic happen!', canvas.width/2, (2/canvas.height) +50);
-	}
+
 	
 window.onload = init;
 	
